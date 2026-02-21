@@ -38,7 +38,7 @@ The model integrates multiple modalities of AML patient data:
 
 ### Adding Epitypes and Epitypes:Genetic terms explained a substantial fraction of inter-patient variability (aroune 30%), exceeding reliance on genetic predictors. 
 <p align="center">
-  <img src="figures/variance_across_models.jpeg" width="650">
+  <img src="figures/variance_across_models.jpg" width="650">
 </p>
 
 
@@ -77,6 +77,7 @@ Epitypes, SHS, and epitype–mutation interactions emerge as among the most sign
 </p>
 
 Multistate modeling captures dynamic transitions between remission, relapse, and death over time following AML diagnosis.
+
 
 
 
