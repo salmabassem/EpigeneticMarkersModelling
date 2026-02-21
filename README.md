@@ -79,7 +79,7 @@ AML patients transition through a directed sequence of clinical states from diag
 ---
 
 
-## Enhancing Model concordance
+## Epitypes enhance model performance across endpoints
 
 Adding DNA methylation features (epitypes, epitype×gene interactions, and the SHS signature) consistently improved model concordance across all five disease transitions and overall survival compared to the standard model using genetics, cytogenetics, and clinical variables alone.
 
@@ -106,6 +106,7 @@ Epitypes, SHS, and epitype–mutation interactions emerge as among the most sign
 </p>
 
 Multistate modeling captures dynamic transitions between remission, relapse, and death over time following AML diagnosis.
+
 
 
 
