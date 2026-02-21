@@ -45,6 +45,52 @@ Previously in our publication, we show how AML patients can be divided into 13 s
 
 
 ### Creating Multi-stage Model 
+
+To create multi-stage model, we defined 6 states that an AML patient can go through: 
+State 1: Diagnosis (starting point)
+State 2: Complete Remission (CR)
+State 3: Relapse
+State 4: Early Death (died without achieving CR)
+State 5: Non-Relapse Death (died in remission)
+State 6: Post-Relapse Death
+
+States 4, 5, and 6 are end fates. Thus, the allowed transitions are:
+1 → 2 (achieved CR)       or   1 → 4 (died early, never got CR)
+2 → 3 (relapsed)          or   2 → 5 (died in remission)
+3 → 6 (died after relapse)
+
+We next built the transition data: 
+
+```{r
+d <- sapply(1:nrow(os_new), function(i) {
+  t <- c(as.numeric(os_new[i, c("time_to_cr", "time_to_relapse", "time_to_fu")]))
+  o <- order(t, na.last = NA)       # sort whichever events happened by time
+  stages <- c(1:3, 0)
+  r <- stages[c(1, o + 1)]         # map ordered events to state numbers
+  if (os_new$sstat[i])
+    r[length(r)] <- r[length(r)-1] + 3   # if patient died, shift final state to a death state
+  ...
+})
+```
+
+where for each patient you take their three possible event times (CR, relapse, last follow-up), sort them chronologically, and convert that sequence into a series of rows in the format (id, stop_time, from_state, to_state). The + 3 shift is important as: states 1→3 are "alive" states, and 4→6 are their corresponding death states. Adding 3 to the last state converts "was in state X" to "died from state X."
+
+We nexted created the graph structure and fit the non-parametric Multi-State Model
+
+```{r
+nodes <- as.character(1:6)
+edges <- list(
+  `1` = list(edges = c("2", "4")),
+  `2` = list(edges = c("3", "5")),
+  `3` = list(edges = "6"),
+  `4` = list(edges = NULL),   # absorbing
+  `5` = list(edges = NULL),   # absorbing
+  `6` = list(edges = NULL)    # absorbing
+)
+struct <- new("graphNEL", nodes = nodes, edgeL = edges, edgemode = "directed")
+msurv <- msSurv(d, struct, bs = FALSE)
+```
+
 <p align="center">
   <img src="figures/Multistage_model.png" width="900">
 </p>
@@ -77,6 +123,7 @@ Epitypes, SHS, and epitype–mutation interactions emerge as among the most sign
 </p>
 
 Multistate modeling captures dynamic transitions between remission, relapse, and death over time following AML diagnosis.
+
 
 
 
