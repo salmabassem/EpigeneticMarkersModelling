@@ -7,20 +7,6 @@ The framework is based on the multistage random-effects survival model developed
 
 ---
 
-## Data Integrated
-
-The model integrates multiple modalities of AML patient data:
-
-* Recurrent genetic alterations
-* Cytogenetics
-* Clinical variables
-* Demographics
-* Treatment protocol (nuisance variables)
-* DNA methylation epitypes
-* Epitype–mutation interaction terms
-
----
-
 # Main Results: 
 
 ## Key Results
@@ -120,6 +106,7 @@ Epitypes, SHS, and epitype–mutation interactions emerge as among the most sign
 </p>
 
 Multistate modeling captures dynamic transitions between remission, relapse, and death over time following AML diagnosis.
+
 
 
 
