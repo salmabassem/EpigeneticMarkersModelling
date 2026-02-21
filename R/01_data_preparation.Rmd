@@ -1,0 +1,192 @@
+---
+title: "Gerstung Epigenetics as category - Added Protocol Year"
+author: "Salma Abdelbaky"
+date: "23/1/2023"
+output: pdf_document
+---
+
+This is the gerstung analysis including epigenetic markers but as part of other markers and including 8 clinical protocols as well as updated BZIP 
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(cache = TRUE)
+```
+
+
+```{r prep_data, message=FALSE, warning = FALSE}
+
+library(devtools)
+library(msSurv)
+library(rmarkdown)
+library(CoxHD)
+library(mg14)
+library(DT)
+library(htmlwidgets)
+library(tinytex)
+library(dplyr)
+library(mltools) #
+library(data.table)
+
+
+drop <- c("list_id","Sample","PATID")
+drop_samp <- c("list_id","PATID")
+
+sampleNames <- read.csv("Sampleids_final.csv", header = TRUE, 
+                        check.names = FALSE, stringsAsFactors = FALSE)
+sampleNames_new <-  sampleNames[,!(names(sampleNames) %in% drop_samp)]
+
+
+MinOccurances = 25
+
+
+## Clinical Data 
+Clinical = read.csv("Clincial_final.csv", header = TRUE, check.names = FALSE, stringsAsFactors = FALSE)
+rownames(Clinical) <- Clinical$Sample
+Clin_new <-  Clinical[,!(names(Clinical) %in% drop)]
+
+
+#Epitype
+Epitype = read.csv("Epitype_final.csv", header = TRUE, check.names = FALSE, stringsAsFactors = FALSE)
+rownames(Epitype) <- Epitype$Sample
+Epitype_new <-  Epitype[,!(names(Epitype) %in% drop)]
+for (i in 1:ncol(Epitype_new)){Epitype_new[,i] <- as.numeric(Epitype_new[,i])}
+
+
+## Genetics 
+Genetics = read.csv("Genetics_JK21.csv", header = TRUE, 
+                    check.names = FALSE, stringsAsFactors = FALSE)
+rownames(Genetics) <- Genetics$Sample
+Gen_new = Genetics[,!(names(Genetics) %in% drop)]
+n <- which(colnames(Gen_new) == "CEBPA_mono" | colnames(Gen_new) == "CEBPA_bi")
+Gen_new <- Gen_new[,-n]
+
+
+
+## Cytogenetics 
+Cytogenetics = read.csv("Cytogenetics_final.csv", header = TRUE, 
+                        check.names = FALSE, stringsAsFactors = FALSE)
+rownames(Cytogenetics) <- Cytogenetics$Sample
+Cyto_new <- Cytogenetics[,!(names(Cytogenetics) %in% drop)]
+
+
+## Demographics 
+Demographics = read.csv("Demographics_final.csv", header = TRUE, 
+                        check.names = FALSE, stringsAsFactors = FALSE)
+rownames(Demographics) <- Demographics$Sample
+Dem_new <- Demographics[,!(names(Demographics) %in% drop)]
+
+
+## Nuisance and Annotation 
+Nuisance = read.csv("detailed data about age and protocol.csv", header = TRUE, check.names = FALSE, stringsAsFactors = FALSE)
+rownames(Nuisance) <- Nuisance$Sample_Id
+colnames(Nuisance)[1] <- "Sample"
+Nuisance <- as.data.frame(Nuisance[,-c(4,6)])
+Nuisance_new <-  as.data.frame(Nuisance[,!(names(Nuisance) %in% drop)])
+rownames(Nuisance_new) <- gsub("*  EXTRA*","",rownames(Nuisance_new))
+
+
+## Extract Drug and Protocol from annotations file to add to the model 
+
+Nuisance_new <- filter(Nuisance_new, rownames(Nuisance_new) %in% rownames(Epitype_new))
+unique(Nuisance_new$PROTOCOL)
+Annotation = read.csv("Annotation.csv", header = TRUE, check.names = FALSE, stringsAsFactors = FALSE, row.names = 1)
+Annotation_new <- as.data.frame(Annotation[rownames(Epitype_new),])
+Nuisance_new <- transform(merge(Annotation_new["drug"], Nuisance_new, by = 0, all = TRUE), row.names = 1)
+colnames(Nuisance_new)[1] <- "Drug"
+
+Nuisance_new <- transform(merge(Epitype_new, Nuisance_new, by = 0, all = TRUE), row.names = 1)
+Nuisance_new <- transform(merge(Epitype_new, Nuisance_new, by = 0), row.names = 1)
+Nuisance_new <- Nuisance_new[ ,c("Drug", "PROTOCOL")]
+
+
+## Adding new bzip annotation to genetic data to evaluate 
+
+Gen_new2 <- cbind(Gen_new, Annotation_new[c("cebpa_bzip", "cebpa_other")])
+Gen_new <- Gen_new2
+
+Clin_new <- transform(merge(Clin_new, Nuisance_new, by = 0), row.names =1)
+
+dataList <-list(Gen_new,
+                Dem_new,
+                Clin_new,
+                Cyto_new, 
+                Epitype_new
+                )
+names(dataList) <- c("Genetics", "Demographics", "Clinical","Cytogenetics",  "Epitype")
+
+for(i in 1 :5){
+  dataList[[i]] <- filter(dataList[[i]], rownames(dataList[[i]]) %in% rownames(Clin_new))
+}
+
+```
+
+
+
+## Creating Genetic-Genetic and Epitype-Genetic interactions 
+
+```{r interactions, message=FALSE, warning = FALSE}
+
+dataList$GeneGene <- MakeInteractions(data.frame(dataList$Genetics), 
+                          data.frame(dataList$Genetics))[,as.vector(upper.tri(matrix(0,ncol=ncol(dataList$Genetics),
+                                                                                                nrow=ncol(dataList$Genetics))))]
+dataList$GeneGene <- dataList$GeneGene[,colSums(dataList$GeneGene, na.rm=TRUE)>0] 
+dataList$GeneGene$`NPM1:FLT3_ITD:DNMT3A` <- (rowSums(dataList$Genetics[c('NPM1',"FLT3_ITD","DNMT3A")])==3)+0  ## Add NPM1:FLT3_ITD:DNMT3A product term as well
+
+
+dataList$CytoCyto <- MakeInteractions(dataList$Cytogenetics,        dataList$Cytogenetics)[,sapply(1:ncol(dataList$Cytogenetics), `<`,1:ncol(dataList$Cytogenetics))]
+
+dataList$CytoCyto <- dataList$CytoCyto[, colSums(dataList$CytoCyto, na.rm=TRUE) > 0]
+dataList$GeneCyto <- MakeInteractions(dataList$Genetics, dataList$Cytogenetics)
+dataList$GeneCyto <- dataList$GeneCyto[,colSums(dataList$GeneCyto, na.rm=TRUE) > 0]
+
+dataRaw <- do.call(cbind,dataList)
+names(dataRaw) <- unlist(sapply(dataList, names))
+dataFrame <- StandardizeMagnitude(dataRaw)
+dim(dataFrame)
+
+groups <- unlist(sapply(names(dataList), function(x) rep(x, ncol(dataList[[x]]))))
+groups[grepl("^(t_)|(inv)", colnames(dataFrame)) &! grepl(":", colnames(dataFrame))] <- "Fusions"
+groups[groups=="Cytogenetics"] <- "CNA"
+groups <- factor(groups)
+names(groups) <- colnames(dataFrame)
+table(groups)
+
+```
+
+## Imputation
+
+```{r impute, message=FALSE, warning = FALSE}
+
+#Poor man's imputation by column means
+
+rowss <- rownames(dataFrame)
+poorMansImpute <- function(x) {x[is.na(x)] <- mean(x, na.rm=TRUE); return(x)}
+dataFrame <- as.data.frame(sapply(dataFrame, poorMansImpute))
+rownames(dataFrame) <- rowss
+
+```
+
+
+## Outcome data
+
+```{r outcome, message=FALSE,warning=FALSE}
+
+osDATA <- read.csv("Outcome_final.csv", header = TRUE, check.names = FALSE, stringsAsFactors = FALSE)
+rownames(osDATA) <- osDATA$Sample
+osDATA <- filter(osDATA, rownames(osDATA) %in% rownames(Clin_new))
+for (i in 2:ncol(osDATA)){osDATA[,i] <- as.numeric(as.character(osDATA[,i]))}
+
+#Looking at OS data: 
+
+osDATA[,3] <- osDATA[,2]/365
+colnames(osDATA)[3] <- "OSyr"
+
+os <- Surv(osDATA$OS, osDATA$STATUS) #OS
+osTD <-  Surv(time = rep(0, nrow(osDATA)), time2=osDATA$OS, event=osDATA$STATUS )
+
+osYr <- Surv(osDATA$OSyr, osDATA$STATUS) #OS
+osYrTD <-  Surv(time = rep(0, nrow(osDATA)), time2=osDATA$OSyr, event=osDATA$STATUS )
+
+#Column 2 is the OS (survyr).
+osYrTD[,1] <- osYrTD[,1]/365
+
+```
