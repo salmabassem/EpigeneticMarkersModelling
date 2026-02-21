@@ -95,11 +95,13 @@ Increasing oncogenic burden is associated with progressively worse overall survi
 
 
 ### Model concordances 
+
+Adding DNA methylation features (epitypes, epitype×gene interactions, and the SHS signature) consistently improved model concordance across all five disease transitions and overall survival compared to the standard model using genetics, cytogenetics, and clinical variables alone.
+
 <p align="center">
-  <img src="results/concordances_models.png" width="750">
+  <img src="figures/models_concordances.png" width="750">
 </p>
 
-DNA methylation features explain a substantial fraction of inter-patient variability in survival outcomes, comparable to or exceeding traditional genetic and clinical predictors.
 
 ---
 
@@ -118,6 +120,7 @@ Epitypes, SHS, and epitype–mutation interactions emerge as among the most sign
 </p>
 
 Multistate modeling captures dynamic transitions between remission, relapse, and death over time following AML diagnosis.
+
 
 
 
