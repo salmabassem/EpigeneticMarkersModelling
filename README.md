@@ -6,13 +6,6 @@ This project implements a **multistage random-effects (RFX) machine learning fra
 The framework is based on the multistage random-effects survival model developed by **Gerstung et al.**, adapted and extended to incorporate incorporate DNA methylation epitypes and epitype-mutation interaction terms.
 
 ---
-## Methodological Framework
-
-###  Model Type
-
-**Multistage Random Effects Cox Model**
-
----
 
 ## Data Integrated
 
@@ -38,3 +31,42 @@ The model integrates multiple modalities of AML patient data:
 * Multistage state-transition modeling
 
 ---
+
+# Main Results: 
+
+## Key Results
+
+### Survival Stratification by Oncogenic Burden
+<p align="center">
+  <img src="results/survival_oncogenic_burden.png" width="650">
+</p>
+
+Increasing oncogenic burden is associated with progressively worse overall survival, demonstrating robust clinical risk stratification captured by the model.
+
+---
+
+### Variance Contribution Across Feature Classes
+<p align="center">
+  <img src="results/variance_components.png" width="650">
+</p>
+
+DNA methylation features explain a substantial fraction of inter-patient variability in survival outcomes, comparable to or exceeding traditional genetic and clinical predictors.
+
+---
+
+### Feature-Level Associations with Outcome
+<p align="center">
+  <img src="results/volcano_os.png" width="650">
+</p>
+
+Epitypes, SHS, and epitype–mutation interactions emerge as among the most significant predictors of outcome, highlighting biologically interpretable drivers.
+
+---
+
+### Multistage Disease Trajectories
+<p align="center">
+  <img src="results/multistate_transitions.png" width="650">
+</p>
+
+Multistate modeling captures dynamic transitions between remission, relapse, and death over time following AML diagnosis.
+
