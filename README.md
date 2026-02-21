@@ -11,7 +11,7 @@ The framework is based on the multistage random-effects survival model developed
 
 ## Key Results
 
-Previously in our publication, we show how AML patients can be divided into 13 subtypes/epitypes according to their global DNA methylation patterns. In order to assess the impact of DNA methylation among other prognostic markers, we used multistage random effects (RFX)  model combining recurrent genetic alterations with clinical and demographic prognostic markers and outperforming ELN genetic-risk classification in the Alliance AML cohort. Adding Epitypes and Epitypes:Genetic terms explained a substantial fraction of inter-patient variability (aroune 30%), exceeding reliance on genetic predictors. Using Overall Survival model, the top significant predictors were mostly epitype-derived.  
+Previously in our publication, we show how AML patients can be divided into 13 subtypes/epitypes according to their global DNA methylation patterns. In order to assess the impact of DNA methylation among other prognostic markers, we used multistage random effects (RFX)  model combining recurrent genetic alterations with clinical and demographic prognostic markers and outperforming ELN genetic-risk classification in the Alliance AML cohort. Adding Epitypes and Epitypes:Genetic terms explained a substantial fraction of inter-patient variability (around 30%), exceeding reliance on genetic predictors. Using Overall Survival model, the top significant predictors were mostly epitype-derived.  
 
 <p align="center">
   <img src="figures/overall_variance_vp.png" width="900">
@@ -75,12 +75,11 @@ AML patients transition through a directed sequence of clinical states from diag
   <img src="figures/Multistage_model.png" width="900">
 </p>
 
-Increasing oncogenic burden is associated with progressively worse overall survival, demonstrating robust clinical risk stratification captured by the model.
 
 ---
 
 
-### Model concordances 
+## Enhancing Model concordance
 
 Adding DNA methylation features (epitypes, epitype×gene interactions, and the SHS signature) consistently improved model concordance across all five disease transitions and overall survival compared to the standard model using genetics, cytogenetics, and clinical variables alone.
 
@@ -91,7 +90,8 @@ Adding DNA methylation features (epitypes, epitype×gene interactions, and the S
 
 ---
 
-### Feature-Level Associations with Outcome
+## Validating in external cohorts 
+
 <p align="center">
   <img src="results/volcano_os.png" width="650">
 </p>
@@ -106,6 +106,7 @@ Epitypes, SHS, and epitype–mutation interactions emerge as among the most sign
 </p>
 
 Multistate modeling captures dynamic transitions between remission, relapse, and death over time following AML diagnosis.
+
 
 
 
