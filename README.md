@@ -38,7 +38,7 @@ The model integrates multiple modalities of AML patient data:
 
 ### Survival Stratification by Oncogenic Burden
 <p align="center">
-  <img src="results/survival_oncogenic_burden.png" width="650">
+  <img src="results/survival-1.png" width="650">
 </p>
 
 Increasing oncogenic burden is associated with progressively worse overall survival, demonstrating robust clinical risk stratification captured by the model.
@@ -69,4 +69,5 @@ Epitypes, SHS, and epitype–mutation interactions emerge as among the most sign
 </p>
 
 Multistate modeling captures dynamic transitions between remission, relapse, and death over time following AML diagnosis.
+
 
