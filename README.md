@@ -69,7 +69,7 @@ msurv <- msSurv(d, struct, bs = FALSE)
 
 ## Multi-State Disease Trajectory and Transition-Specific Variance Components:
 
-AML patients transition through a directed sequence of clinical states from diagnosis through remission, relapse, and death each governed by different biology. We modeled this explicitly using a 6 state Markov structure fit with msSurv and five separate CoxRFX random effects models, one per transition. The left panel shows the population level state occupation probabilities over time. The right panel shows that the dominant predictors shift across transitions where CNA drives early death, epigenetic features dominate remission and post-relapse outcomes, and demographics (age) becomes critical for non-relapse death. Epitypes have considerable weight across all clinical endpoints. 
+AML patients transition through a directed sequence of clinical states from diagnosis through remission, relapse, and death each governed by different biology. We modeled this explicitly using a 6 state Markov structure fit with msSurv and five separate CoxRFX random effects models, one per transition. The left panel shows the population level state occupation probabilities over time. The right panel shows that the dominant predictors shift across transitions where CNA drives early death, epigenetic features dominate remission and relapse outcomes, and demographics (age) becomes more important for non-relapse death. Epitypes have considerable weight across all clinical endpoints. 
 
 <p align="center">
   <img src="figures/Multistage_model.png" width="900">
@@ -106,6 +106,7 @@ Epitypes, SHS, and epitype–mutation interactions emerge as among the most sign
 </p>
 
 Multistate modeling captures dynamic transitions between remission, relapse, and death over time following AML diagnosis.
+
 
 
 
