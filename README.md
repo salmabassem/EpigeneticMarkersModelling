@@ -21,17 +21,6 @@ The model integrates multiple modalities of AML patient data:
 
 ---
 
-## Modeling Components
-
-* Random-effects structure by feature class
-* Time-dependent survival modeling
-* Bootstrap-based variance estimation
-* Wald testing with FDR correction
-* Variance component decomposition
-* Multistage state-transition modeling
-
----
-
 # Main Results: 
 
 ## Key Results
@@ -92,7 +81,7 @@ msurv <- msSurv(d, struct, bs = FALSE)
 ```
 
 
-Multi-State Disease Trajectory and Transition-Specific Variance Components:
+## Multi-State Disease Trajectory and Transition-Specific Variance Components:
 
 AML patients transition through a directed sequence of clinical states from diagnosis through remission, relapse, and death each governed by different biology. We modeled this explicitly using a 6 state Markov structure fit with msSurv and five separate CoxRFX random effects models, one per transition. The left panel shows the population level state occupation probabilities over time. The right panel shows that the dominant predictors shift across transitions where CNA drives early death, epigenetic features dominate remission and post-relapse outcomes, and demographics (age) becomes critical for non-relapse death. Epitypes have considerable weight across all clinical endpoints. 
 
@@ -104,9 +93,10 @@ Increasing oncogenic burden is associated with progressively worse overall survi
 
 ---
 
-### Variance Contribution Across Feature Classes
+
+### Model concordances 
 <p align="center">
-  <img src="results/variance_components.png" width="650">
+  <img src="results/concordances_models.png" width="750">
 </p>
 
 DNA methylation features explain a substantial fraction of inter-patient variability in survival outcomes, comparable to or exceeding traditional genetic and clinical predictors.
@@ -128,6 +118,7 @@ Epitypes, SHS, and epitype–mutation interactions emerge as among the most sign
 </p>
 
 Multistate modeling captures dynamic transitions between remission, relapse, and death over time following AML diagnosis.
+
 
 
 
