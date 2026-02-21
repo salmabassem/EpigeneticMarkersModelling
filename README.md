@@ -46,7 +46,7 @@ Previously in our publication, we show how AML patients can be divided into 13 s
 
 ### Creating Multi-stage Model 
 <p align="center">
-  <img src="figures/Multistage_model.png" width="650">
+  <img src="figures/Multistage_model.png" width="900">
 </p>
 
 Increasing oncogenic burden is associated with progressively worse overall survival, demonstrating robust clinical risk stratification captured by the model.
@@ -77,6 +77,7 @@ Epitypes, SHS, and epitype–mutation interactions emerge as among the most sign
 </p>
 
 Multistate modeling captures dynamic transitions between remission, relapse, and death over time following AML diagnosis.
+
 
 
 
