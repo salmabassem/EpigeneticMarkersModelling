@@ -100,13 +100,6 @@ Epitypes, SHS, and epitype–mutation interactions emerge as among the most sign
 
 ---
 
-### Multistage Disease Trajectories
-<p align="center">
-  <img src="results/multistate_transitions.png" width="650">
-</p>
-
-Multistate modeling captures dynamic transitions between remission, relapse, and death over time following AML diagnosis.
-
 
 
 
