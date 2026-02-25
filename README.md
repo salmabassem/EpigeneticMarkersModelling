@@ -11,7 +11,7 @@ The framework is based on the multistage random-effects survival model developed
 
 ## Key Results
 
-Previously in our publication, we show how AML patients can be divided into 13 subtypes/epitypes according to their global DNA methylation patterns. In order to assess the impact of DNA methylation among other prognostic markers, we used multistage random effects (RFX)  model combining recurrent genetic alterations with clinical and demographic prognostic markers and outperforming ELN genetic-risk classification in the Alliance AML cohort. Adding Epitypes and Epitypes:Genetic terms explained a substantial fraction of inter-patient variability (around 30%), exceeding reliance on genetic predictors. Using Overall Survival model, the top significant predictors were mostly epitype-derived.  
+Previously, we show how AML patients can be divided into 13 subtypes/epitypes according to their global DNA methylation patterns. To assess the impact of DNA methylation among other prognostic markers, we used multistage random effects (RFX)  model combining recurrent genetic alterations with clinical and demographic prognostic markers and outperforming ELN genetic-risk classification in the Alliance AML cohort.   
 
 <p align="center">
   <img src="figures/overall_variance_vp.png" width="900">
@@ -99,6 +99,7 @@ Adding DNA methylation features (epitypes, epitype×gene interactions, and the S
 Epitypes, SHS, and epitype–mutation interactions emerge as among the most significant predictors of outcome, highlighting biologically interpretable drivers.
 
 ---
+
 
 
 
